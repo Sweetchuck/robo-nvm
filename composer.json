@@ -1,0 +1,47 @@
+{
+    "name": "sweetchuck/robo-nvm",
+    "description": "Robo task wrapper for NVM commands.",
+    "license": "GPL-3.0-or-later",
+    "config": {
+        "bin-dir": "bin",
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.1",
+        "consolidation/robo": "^1.0",
+        "danielstjules/stringy": "^3.1"
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.2",
+        "sweetchuck/codeception-module-robo-task-runner": "^0.0",
+        "sweetchuck/git-hooks": "^0.0",
+        "sweetchuck/robo-git": "^0.0",
+        "sweetchuck/robo-phpcs": "^0.0",
+        "symfony/finder": "^3.2 || ^4.0",
+        "webmozart/path-util": "^2.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Sweetchuck\\Robo\\Nvm\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sweetchuck\\Robo\\Nvm\\Composer\\": "src-dev/Composer/",
+            "Sweetchuck\\Robo\\Nvm\\Test\\Helper\\": "tests/_support/Helper/",
+            "Sweetchuck\\Robo\\Nvm\\Tests\\Acceptance\\": "tests/acceptance/",
+            "Sweetchuck\\Robo\\Nvm\\Tests\\Unit\\": "tests/unit/",
+            "Sweetchuck\\Robo\\Nvm\\TestsFixtures\\": "tests/_data/fixtures/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "\\Sweetchuck\\Robo\\Nvm\\Composer\\Scripts::postInstallCmd"
+        ],
+        "post-update-cmd": [
+            "\\Sweetchuck\\Robo\\Nvm\\Composer\\Scripts::postUpdateCmd"
+        ]
+    }
+}
