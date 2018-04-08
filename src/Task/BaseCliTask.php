@@ -44,9 +44,9 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
     {
         parent::initOptions();
         $this->options += [
-            'nvmExecutable' => [
+            'nvmShFilePath' => [
                 'type' => 'other',
-                'value' => 'nvm',
+                'value' => $this->getDefaultNvmShFilePath(),
             ],
             'command' => [
                 'type' => 'other',
@@ -60,6 +60,21 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         ];
 
         return $this;
+    }
+
+    protected function getDefaultNvmShFilePath(): string
+    {
+        $nvmDir = getenv('NVM_DIR');
+        if ($nvmDir) {
+            return "$nvmDir/nvm.sh";
+        }
+
+        $home = getenv('HOME');
+        if ($home) {
+            return "$home/.nvm/nvm.sh";
+        }
+
+        return '';
     }
 
     /**
@@ -141,8 +156,9 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
      */
     protected function getCommandNvmExecutable()
     {
-        $this->cmdPattern[] = '%s';
-        $this->cmdArgs[] = $this->options['nvmExecutable']['value'];
+        $nvmShFilePath = $this->options['nvmShFilePath']['value'];
+        $this->cmdPattern[] = '. %s; nvm';
+        $this->cmdArgs[] = escapeshellarg($nvmShFilePath);
 
         return $this;
     }
@@ -267,7 +283,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
      */
     protected function runValidateNvmExecutable()
     {
-        if (empty($this->options['nvmExecutable']['value'])) {
+        if (empty($this->options['nvmShFilePath']['value'])) {
             throw new \InvalidArgumentException('@todo', 1);
         }
 

@@ -24,7 +24,7 @@ class WhichTaskTest extends BaseCliTaskTestBase
     {
         return [
             'basic' => [
-                "nvm which '8.9'",
+                ". '/home/me/.nvm/nvm.sh'; nvm which '8.9'",
                 [
                     'arguments' => ['8.9'],
                 ],

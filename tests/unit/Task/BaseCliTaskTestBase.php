@@ -41,6 +41,9 @@ abstract class BaseCliTaskTestBase extends Unit
      */
     public function testGetCommand(string $expected, array $options)
     {
+        $options += [
+            'nvmShFilePath' => '/home/me/.nvm/nvm.sh',
+        ];
         $this->task->setOptions($options);
 
         $this->tester->assertEquals($expected, $this->task->getCommand());
