@@ -8,10 +8,13 @@ class ListOutputParser extends ParserBase
      * {@inheritdoc}
      */
     protected $assetNameMapping = [
-        'current' => 'current',
-        'versions' => 'versions',
+        'current' => 'nvm.list.current',
+        'versions' => 'nvm.list.versions',
     ];
 
+    /**
+     * {@inheritdoc}
+     */
     public function parse(int $exitCode, string $stdOutput, string $stdError): array
     {
         if ($exitCode !== 0) {

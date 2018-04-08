@@ -22,4 +22,20 @@ trait NvmTaskLoader
 
         return $task;
     }
+
+    /**
+     * @return \Sweetchuck\Robo\Nvm\Task\WhichTask|\Robo\Collection\CollectionBuilder
+     */
+    protected function taskNvmWhichTask(array $options = []): CollectionBuilder
+    {
+        /** @var \Sweetchuck\Robo\Nvm\Task\WhichTask|\Robo\Collection\CollectionBuilder $task */
+        $task = $this->task(Task\WhichTask::class);
+        if ($this instanceof ContainerAwareInterface) {
+            $task->setContainer($this->getContainer());
+        }
+
+        $task->setOptions($options);
+
+        return $task;
+    }
 }

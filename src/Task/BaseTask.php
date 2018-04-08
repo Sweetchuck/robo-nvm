@@ -171,7 +171,9 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
     {
         if (!$this->outputParser && $this->outputParserClass) {
             $this->outputParser = new $this->outputParserClass();
-            $this->outputParser->setAssetNameMapping($this->outputParserAssetNameMapping);
+            if ($this->outputParserAssetNameMapping) {
+                $this->outputParser->setAssetNameMapping($this->outputParserAssetNameMapping);
+            }
         }
 
         return $this->outputParser;
