@@ -10,7 +10,7 @@ trait NvmTaskLoader
     /**
      * @return \Sweetchuck\Robo\Nvm\Task\ListLocalTask|\Robo\Collection\CollectionBuilder
      */
-    protected function taskNvmListLocalTask(array $options = []): CollectionBuilder
+    protected function taskNvmListLocal(array $options = []): CollectionBuilder
     {
         /** @var \Sweetchuck\Robo\Nvm\Task\ListLocalTask|\Robo\Collection\CollectionBuilder $task */
         $task = $this->task(Task\ListLocalTask::class);
@@ -26,7 +26,7 @@ trait NvmTaskLoader
     /**
      * @return \Sweetchuck\Robo\Nvm\Task\WhichTask|\Robo\Collection\CollectionBuilder
      */
-    protected function taskNvmWhichTask(array $options = []): CollectionBuilder
+    protected function taskNvmWhich(array $options = []): CollectionBuilder
     {
         /** @var \Sweetchuck\Robo\Nvm\Task\WhichTask|\Robo\Collection\CollectionBuilder $task */
         $task = $this->task(Task\WhichTask::class);

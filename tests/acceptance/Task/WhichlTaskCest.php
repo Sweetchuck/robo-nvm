@@ -73,6 +73,6 @@ class WhichlTaskCest extends TaskCestBase
      */
     protected function getTask(): CollectionBuilder
     {
-        return $this->taskBuilder->taskNvmWhichTask();
+        return $this->taskBuilder->taskNvmWhich();
     }
 }

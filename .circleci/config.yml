@@ -1,5 +1,5 @@
 
-version: 2
+version: 2.1
 
 _custom:
     step__run__install_php_extensions: &step__run__install_php_extensions
@@ -62,6 +62,8 @@ _custom:
 
     job__lint_and_test: &job__lint_and_test
         working_directory: '~/repo'
+        environment:
+            USER: 'circleci'
         steps:
             - 'checkout'
             -
@@ -101,6 +103,7 @@ jobs:
         docker:
             -
                 image: 'circleci/php:7.1'
+
     php702__lint_and_test:
         <<: *job__lint_and_test
         docker:
@@ -108,7 +111,7 @@ jobs:
                 image: 'circleci/php:7.2'
 
 workflows:
-    version: 2
+    version: 2.1
     php701__lint_and_test:
         jobs:
             - 'php701__lint_and_test'
