@@ -22,8 +22,8 @@ class DummyTaskBuilder implements BuilderAwareInterface, ContainerAwareInterface
     use TaskIO;
 
     use NvmTaskLoader {
-        taskNvmListLocalTask as public;
-        taskNvmWhichTask as public;
+        taskNvmListLocal as public;
+        taskNvmWhich as public;
     }
 
     public function collectionBuilder(): CollectionBuilder

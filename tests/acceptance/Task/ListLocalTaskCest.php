@@ -80,6 +80,6 @@ class ListLocalTaskCest extends TaskCestBase
      */
     protected function getTask(): CollectionBuilder
     {
-        return $this->taskBuilder->taskNvmListLocalTask();
+        return $this->taskBuilder->taskNvmListLocal();
     }
 }

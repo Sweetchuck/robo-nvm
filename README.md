@@ -14,9 +14,22 @@
 ```php
 <?php
 
+use Sweetchuck\Robo\Nvm\NvmTaskLoader;
+
 class RoboFile extends \Robo\Tasks
 {
-    // @todo
+    use \Sweetchuck\Robo\Nvm\NvmTaskLoader;
+
+    public function nvmListLocal()
+    {
+        $result = $this
+            ->taskNvmListLocal()
+            ->run()
+            ->stopOnFail();
+
+        $this->say($result['nvm.listLocal.current']);
+        $this->say(implode(', ', $result['nvm.listLocal.versions']));
+    }
 }
 
 ```
