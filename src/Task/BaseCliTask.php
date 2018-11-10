@@ -6,6 +6,7 @@ use Robo\Common\OutputAwareTrait;
 use Robo\Contract\CommandInterface;
 use Robo\Contract\OutputAwareInterface;
 use Sweetchuck\Robo\Nvm\Utils;
+use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
 /**
@@ -299,13 +300,8 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
             $this->processRunCallback($type, $data);
         };
 
-        // @todo Check that everything is available.
-        /** @var \Symfony\Component\Process\Process $process */
         $process = $this
-            ->getContainer()
-            ->get('application')
-            ->getHelperSet()
-            ->get('process')
+            ->getProcessHelper()
             ->run($this->output(), $this->command, null, $processRunCallbackWrapper);
 
         $this->processExitCode = $process->getExitCode();
@@ -313,6 +309,16 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         $this->processStdError = $process->getErrorOutput();
 
         return $this;
+    }
+
+    protected function getProcessHelper(): ProcessHelper
+    {
+        // @todo Check that everything is available.
+        return $this
+            ->getContainer()
+            ->get('application')
+            ->getHelperSet()
+            ->get('process');
     }
 
     protected function processRunCallback(string $type, string $data): void

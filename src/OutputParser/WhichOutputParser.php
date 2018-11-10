@@ -10,8 +10,8 @@ class WhichOutputParser extends ParserBase
      * {@inheritdoc}
      */
     protected $assetNameMapping = [
-        'binDir' => 'nvm.which.binDir',
         'nodeExecutable' => 'nvm.which.nodeExecutable',
+        'binDir' => 'nvm.which.binDir',
     ];
 
     /**
@@ -26,13 +26,21 @@ class WhichOutputParser extends ParserBase
         $assetNameNodeExecutable = $this->getExternalAssetName('nodeExecutable');
         $assetNameBinDir = $this->getExternalAssetName('binDir');
 
-        $nodeExecutable = trim($stdOutput);
-
-        return [
+        $return = [
             'assets' => [
-                $assetNameNodeExecutable => $nodeExecutable,
-                $assetNameBinDir => Path::getDirectory($nodeExecutable),
+                $assetNameNodeExecutable => null,
+                $assetNameBinDir => null,
             ],
         ];
+
+        $nodeExecutable = trim($stdOutput);
+        if (!$nodeExecutable) {
+            return $return;
+        }
+
+        $return['assets'][$assetNameNodeExecutable] = $nodeExecutable;
+        $return['assets'][$assetNameBinDir] = Path::getDirectory($nodeExecutable);
+
+        return $return;
     }
 }

@@ -24,11 +24,11 @@ class ListLocalTaskTest extends BaseCliTaskTestBase
     {
         return [
             'basic' => [
-                ". '/home/me/.nvm/nvm.sh'; nvm ls",
+                ". '/home/me/.nvm/nvm.sh'; nvm ls --no-colors",
                 [],
             ],
             'with version' => [
-                ". '/home/me/.nvm/nvm.sh'; nvm ls '8.9'",
+                ". '/home/me/.nvm/nvm.sh'; nvm ls --no-colors '8.9'",
                 [
                     'arguments' => ['8.9'],
                 ],

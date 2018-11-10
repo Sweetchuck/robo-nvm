@@ -30,17 +30,18 @@ class ListOutputParser extends ParserBase
             ],
         ];
 
-        $pattern = '/^(?P<current>->){0,1}\s+(?P<versions>.+?)$/smiu';
+        $pattern = '/^(?P<current>->){0,1}\s+(?P<versions>[^\s]+)/smiu';
         $matches = [];
-        if (preg_match_all($pattern, $stdOutput, $matches)
-            && !empty($matches['versions'])
-        ) {
-            $return['assets'][$assetNameVersions] = $matches['versions'];
-            if (!empty($matches['current'])) {
-                $index = array_search('->', $matches['current']);
-                if ($index !== false) {
-                    $return['assets'][$assetNameCurrent] = $matches['versions'][$index];
-                }
+        preg_match_all($pattern, $stdOutput, $matches);
+        if (empty($matches['versions'])) {
+            return $return;
+        }
+
+        $return['assets'][$assetNameVersions] = $matches['versions'];
+        if (!empty($matches['current'])) {
+            $index = array_search('->', $matches['current']);
+            if ($index !== false) {
+                $return['assets'][$assetNameCurrent] = $matches['versions'][$index];
             }
         }
 

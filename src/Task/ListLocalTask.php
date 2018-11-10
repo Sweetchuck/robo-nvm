@@ -31,6 +31,11 @@ class ListLocalTask extends BaseCliTask
     {
         parent::initOptions();
         $this->options['command']['value'] = 'ls';
+        $this->options['noColors'] = [
+            'type' => 'option:flag',
+            'cliName' => 'no-colors',
+            'value' => true,
+        ];
 
         return $this;
     }

@@ -30,8 +30,8 @@ class WhichTask extends BaseCliTask
     protected function runInitAssets()
     {
         parent::runInitAssets();
-        $this->assets['nvm.which.binDir'] = null;
         $this->assets['nvm.which.nodeExecutable'] = null;
+        $this->assets['nvm.which.binDir'] = null;
 
         return $this;
     }

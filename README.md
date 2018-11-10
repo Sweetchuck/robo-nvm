@@ -1,16 +1,15 @@
 # Robo task to run NVM related tasks
 
-@todo
+[![CircleCI](https://circleci.com/gh/Sweetchuck/robo-nvm.svg?style=svg)](https://circleci.com/gh/Sweetchuck/robo-nvm)
+[![codecov](https://codecov.io/gh/Sweetchuck/robo-nvm/branch/master/graph/badge.svg)](https://codecov.io/gh/Sweetchuck/robo-nvm)
 
 
-Install
--------
+## Install
 
 `composer require --dev sweetchuck/robo-nvm`
 
 
-Usage
------
+## Usage
 
 ```php
 <?php
