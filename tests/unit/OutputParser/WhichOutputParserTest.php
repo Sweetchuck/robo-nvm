@@ -37,6 +37,20 @@ class WhichOutputParserTest extends Unit
                 0,
                 "/foo/bar/bin/node\n",
             ],
+            'withSpam' => [
+                [
+                    'assets' => [
+                        'nvm.which.nodeExecutable' => '/home/me/.nvm/versions/node/v9.3.0/bin/node',
+                        'nvm.which.binDir' => '/home/me/.nvm/versions/node/v9.3.0/bin',
+                    ],
+                ],
+                0,
+                implode(PHP_EOL, [
+                    "Found '/a/b/c/.nvmrc' with version <9.3>",
+                    '/home/me/.nvm/versions/node/v9.3.0/bin/node',
+                    '',
+                ]),
+            ],
         ];
     }
 

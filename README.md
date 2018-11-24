@@ -18,8 +18,11 @@ use Sweetchuck\Robo\Nvm\NvmTaskLoader;
 
 class RoboFile extends \Robo\Tasks
 {
-    use \Sweetchuck\Robo\Nvm\NvmTaskLoader;
+    use NvmTaskLoader;
 
+    /**
+     * @command nvm:list-local
+     */
     public function nvmListLocal()
     {
         $result = $this
@@ -27,8 +30,36 @@ class RoboFile extends \Robo\Tasks
             ->run()
             ->stopOnFail();
 
-        $this->say($result['nvm.listLocal.current']);
-        $this->say(implode(', ', $result['nvm.listLocal.versions']));
+        $this->say(sprintf(
+            'Current node is: %s',
+            $result['nvm.listLocal.current']
+        ));
+
+        $this->say(sprintf(
+            'Available NodeJS versions: %s',
+            implode(', ', $result['nvm.listLocal.versions'])
+        ));
+    }
+
+    /**
+     * @command nvm:which
+     */
+    public function nvmWhich()
+    {
+        $result = $this
+            ->taskNvmWhich()
+            ->run()
+            ->stopOnFail();
+
+        $this->say(sprintf(
+            'Path to "node" executable is: %s',
+            $result['nvm.which.nodeExecutable']
+        ));
+
+        $this->say(sprintf(
+            'Path to "bin" directory is: %s',
+            $result['nvm.which.binDir']
+        ));
     }
 }
 

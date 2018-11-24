@@ -1,9 +1,10 @@
 <?php
 
-use Robo\Tasks;
-use Sweetchuck\LintReport\Reporter\BaseReporter;
 use League\Container\ContainerInterface;
 use Robo\Collection\CollectionBuilder;
+use Robo\State\Data as RoboStateData;
+use Robo\Tasks;
+use Sweetchuck\LintReport\Reporter\BaseReporter;
 use Sweetchuck\Robo\Git\GitTaskLoader;
 use Sweetchuck\Robo\Phpcs\PhpcsTaskLoader;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
@@ -48,6 +49,9 @@ class RoboFile extends Tasks
      */
     protected $binDir = 'vendor/bin';
 
+    /**
+     * @var string
+     */
     protected $gitHook = '';
 
     /**
@@ -69,9 +73,6 @@ class RoboFile extends Tasks
      */
     protected $environmentName = '';
 
-    /**
-     * RoboFile constructor.
-     */
     public function __construct()
     {
         putenv('COMPOSER_DISABLE_XDEBUG_WARN=1');
@@ -124,6 +125,14 @@ class RoboFile extends Tasks
             ->collectionBuilder()
             ->addTask($this->taskComposerValidate())
             ->addTask($this->getTaskPhpcsLint());
+    }
+
+    /**
+     * @command readme:update
+     */
+    public function readmeUpdate(): CollectionBuilder
+    {
+        return $this->getTaskReadmeUpdate();
     }
 
     protected function errorOutput(): ?OutputInterface
@@ -407,6 +416,35 @@ class RoboFile extends Tasks
         }
 
         return $this->taskPhpcsLintFiles($options);
+    }
+
+    protected function getTaskReadmeUpdate(): CollectionBuilder
+    {
+        $writeToFileTask = $this
+            ->taskWriteToFile('README.md')
+            ->append(true);
+
+        return $this
+            ->collectionBuilder()
+            ->addCode(function (RoboStateData $data): int {
+                $data['example'] = file_get_contents('RoboFileExample.php');
+
+                return $data['example'] === false ? 1 : 0;
+            })
+            ->addCode(function (RoboStateData $data) use ($writeToFileTask): int {
+                $writeToFileTask
+                    ->regexReplace(
+                        '/(?<=\n```php\n).+(?=\n```\n)/us',
+                        $data['example']
+                    )
+                    ->replace(
+                        'class RoboFileExample ',
+                        'class RoboFile '
+                    );
+
+                return 0;
+            })
+            ->addTask($writeToFileTask);
     }
 
     protected function isPhpExtensionAvailable(string $extension): bool

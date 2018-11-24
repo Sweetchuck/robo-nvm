@@ -33,10 +33,13 @@ class WhichOutputParser extends ParserBase
             ],
         ];
 
-        $nodeExecutable = trim($stdOutput);
-        if (!$nodeExecutable) {
+        $stdOutput = trim($stdOutput);
+        if (!$stdOutput) {
             return $return;
         }
+
+        $lines = explode(PHP_EOL, $stdOutput);
+        $nodeExecutable = end($lines);
 
         $return['assets'][$assetNameNodeExecutable] = $nodeExecutable;
         $return['assets'][$assetNameBinDir] = Path::getDirectory($nodeExecutable);
