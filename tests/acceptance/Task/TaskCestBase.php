@@ -76,6 +76,11 @@ abstract class TaskCestBase
         $this->taskBuilder->setBuilder($this->builder);
     }
 
+    /**
+     * @return \Sweetchuck\Robo\Nvm\Task\BaseCliTask|\Robo\Collection\CollectionBuilder
+     */
+    abstract protected function getTask(array $options = [], array $constructorArgs = []): CollectionBuilder;
+
     abstract protected function runSuccessCases(): array;
 
     /**
@@ -86,8 +91,10 @@ abstract class TaskCestBase
         DummyProcess::$prophecy[] = $example['process'];
 
         $result = $this
-            ->getTask()
-            ->setOptions($example['options'] ?? [])
+            ->getTask(
+                $example['options'] ?? [],
+                $example['constructorArgs'] ?? []
+            )
             ->run();
 
         if (array_key_exists('exitCode', $example['expected'])) {
@@ -125,18 +132,17 @@ abstract class TaskCestBase
         }
     }
 
-    /**
-     * @return \Robo\Collection\CollectionBuilder|\Sweetchuck\Robo\Nvm\Task\BaseCliTask
-     */
-    abstract protected function getTask(): CollectionBuilder;
-
     protected function assertRoboTaskLogEntries(array $expected, array $actual)
     {
         $this->tester->assertSame(count($expected), count($actual), 'Number of log messages');
 
         foreach ($actual as $key => $log) {
             unset($log[2]['task']);
-            $this->tester->assertSame($expected[$key], $log);
+            $this->tester->assertSame(
+                $expected[$key],
+                $log,
+                "Log message; key: '$key'"
+            );
         }
     }
 }
