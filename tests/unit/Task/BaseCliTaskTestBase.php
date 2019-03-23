@@ -21,12 +21,59 @@ abstract class BaseCliTaskTestBase extends Unit
      */
     protected $task;
 
-    // @codingStandardsIgnoreStart
+    protected $originalContainer;
+
+    protected $container;
+
+    // @phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
     public function _before()
     {
-        // @codingStandardsIgnoreEnd
         parent::_before();
-        $this->initTask();
+        $this
+            ->backupContainer()
+            ->initContainer()
+            ->initTask();
+    }
+
+    protected function _after()
+    {
+        $this->restoreContainer();
+        parent::_after();
+    }
+    //phpcs:enable PSR2.Methods.MethodDeclaration.Underscore
+
+    protected function backupContainer()
+    {
+        $this->originalContainer = Robo::hasContainer() ? Robo::getContainer() : null;
+        if ($this->originalContainer) {
+            Robo::unsetContainer();
+        }
+
+        return $this;
+    }
+
+    protected function initContainer()
+    {
+        $this->container = Robo::createDefaultContainer();
+
+        $application = new Application('RoboNvmTest', '1.0.0');
+        $application->setHelperSet(new HelperSet(['process' => new DummyProcessHelper()]));
+        $this->container->add('application', $application);
+
+        return $this;
+    }
+
+    protected function restoreContainer()
+    {
+        if ($this->originalContainer) {
+            Robo::setContainer($this->originalContainer);
+
+            return $this;
+        }
+
+        Robo::unsetContainer();
+
+        return $this;
     }
 
     /**
@@ -59,27 +106,10 @@ abstract class BaseCliTaskTestBase extends Unit
         $instanceIndex = count(DummyProcess::$instances);
         DummyProcess::$prophecy[$instanceIndex] = $processProphecy;
 
-        $containerBackup = Robo::hasContainer() ? Robo::getContainer() : null;
-        if ($containerBackup) {
-            Robo::unsetContainer();
-        }
-
-        $container = Robo::createDefaultContainer();
-
-        $application = new Application('RoboNvmTest', '1.0.0');
-        $application->setHelperSet(new HelperSet(['process' => new DummyProcessHelper()]));
-        $container->add('application', $application);
-
-        $this->task->setContainer($container);
+        $this->task->setContainer($this->container);
         $result = $this->task
             ->setOptions($options)
             ->run();
-
-        if ($containerBackup) {
-            Robo::setContainer($containerBackup);
-        } else {
-            Robo::unsetContainer();
-        }
 
         if (array_key_exists('exitCode', $expected)) {
             $this->assertEquals($expected['exitCode'], $result->getExitCode());

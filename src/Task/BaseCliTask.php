@@ -5,11 +5,15 @@ namespace Sweetchuck\Robo\Nvm\Task;
 use Robo\Common\OutputAwareTrait;
 use Robo\Contract\CommandInterface;
 use Robo\Contract\OutputAwareInterface;
+use Sweetchuck\Robo\Nvm\NvmShFinder;
+use Sweetchuck\Robo\Nvm\NvmShFinderInterface;
 use Sweetchuck\Robo\Nvm\Utils;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
 /**
+ * @method string getNvmShFilePath()
+ * @method $this  setNvmShFilePath(string $filePath)
  * @method string getNvmExecutable()
  * @method $this  setNvmExecutable(string $path)
  * @method array  getArguments()
@@ -41,13 +45,27 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         'other' => 100,
     ];
 
+    /**
+     * @var \Sweetchuck\Robo\Nvm\NvmShFinderInterface
+     */
+    protected $nvmShFinder;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __construct(?NvmShFinderInterface $nvmShFinder = null)
+    {
+        $this->nvmShFinder = $nvmShFinder ?: new NvmShFinder();
+        parent::__construct();
+    }
+
     protected function initOptions()
     {
         parent::initOptions();
         $this->options += [
             'nvmShFilePath' => [
                 'type' => 'other',
-                'value' => $this->getDefaultNvmShFilePath(),
+                'value' => '',
             ],
             'command' => [
                 'type' => 'other',
@@ -61,21 +79,6 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         ];
 
         return $this;
-    }
-
-    protected function getDefaultNvmShFilePath(): string
-    {
-        $nvmDir = getenv('NVM_DIR');
-        if ($nvmDir) {
-            return "$nvmDir/nvm.sh";
-        }
-
-        $home = getenv('HOME');
-        if ($home) {
-            return "$home/.nvm/nvm.sh";
-        }
-
-        return '';
     }
 
     /**
@@ -157,9 +160,13 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
      */
     protected function getCommandNvmExecutable()
     {
-        $nvmShFilePath = $this->options['nvmShFilePath']['value'];
-        $this->cmdPattern[] = '. %s; nvm';
-        $this->cmdArgs[] = escapeshellarg($nvmShFilePath);
+        $nvmShFilePath = $this->options['nvmShFilePath']['value'] ?: $this->nvmShFinder->find();
+        if ($nvmShFilePath) {
+            $this->cmdPattern[] = '. %s;';
+            $this->cmdArgs[] = escapeshellarg($nvmShFilePath);
+        }
+
+        $this->cmdPattern[] = 'nvm';
 
         return $this;
     }
@@ -267,26 +274,6 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
                 'command' => $this->command,
             ]
         );
-
-        return $this;
-    }
-
-    protected function runValidate()
-    {
-        parent::runValidate();
-        $this->runValidateNvmExecutable();
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    protected function runValidateNvmExecutable()
-    {
-        if (empty($this->options['nvmShFilePath']['value'])) {
-            throw new \InvalidArgumentException('@todo', 1);
-        }
 
         return $this;
     }

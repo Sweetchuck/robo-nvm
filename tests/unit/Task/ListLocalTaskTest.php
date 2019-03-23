@@ -3,6 +3,7 @@
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\Task;
 
 use Sweetchuck\Robo\Nvm\Task\ListLocalTask;
+use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder;
 
 class ListLocalTaskTest extends BaseCliTaskTestBase
 {
@@ -12,7 +13,10 @@ class ListLocalTaskTest extends BaseCliTaskTestBase
      */
     protected function initTask()
     {
-        $this->task = new ListLocalTask();
+        $taskBuilder = new DummyTaskBuilder();
+        $taskBuilder->setContainer($this->container);
+
+        $this->task = $taskBuilder->taskNvmListLocal();
 
         return $this;
     }

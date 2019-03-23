@@ -2,7 +2,7 @@
 
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\Task;
 
-use Sweetchuck\Robo\Nvm\Task\WhichTask;
+use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder;
 
 class WhichTaskTest extends BaseCliTaskTestBase
 {
@@ -12,7 +12,10 @@ class WhichTaskTest extends BaseCliTaskTestBase
      */
     protected function initTask()
     {
-        $this->task = new WhichTask();
+        $taskBuilder = new DummyTaskBuilder();
+        $taskBuilder->setContainer($this->container);
+
+        $this->task = $taskBuilder->taskNvmWhich();
 
         return $this;
     }
@@ -29,6 +32,14 @@ class WhichTaskTest extends BaseCliTaskTestBase
                     'arguments' => ['8.9'],
                 ],
             ],
+            'workingDirectory' => [
+                "cd 'my-dir' && . '/home/me/.nvm/nvm.sh'; nvm which '8.9'",
+                [
+                    'workingDirectory' => 'my-dir',
+                    'arguments' => ['8.9'],
+                ],
+            ],
+
         ];
     }
 

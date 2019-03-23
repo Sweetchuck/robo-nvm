@@ -10,10 +10,12 @@ trait NvmTaskLoader
     /**
      * @return \Sweetchuck\Robo\Nvm\Task\ListLocalTask|\Robo\Collection\CollectionBuilder
      */
-    protected function taskNvmListLocal(array $options = []): CollectionBuilder
-    {
+    protected function taskNvmListLocal(
+        array $options = [],
+        ?NvmShFinderInterface $nvmShFinder = null
+    ): CollectionBuilder {
         /** @var \Sweetchuck\Robo\Nvm\Task\ListLocalTask|\Robo\Collection\CollectionBuilder $task */
-        $task = $this->task(Task\ListLocalTask::class);
+        $task = $this->task(Task\ListLocalTask::class, $nvmShFinder);
         if ($this instanceof ContainerAwareInterface) {
             $task->setContainer($this->getContainer());
         }
@@ -26,10 +28,12 @@ trait NvmTaskLoader
     /**
      * @return \Sweetchuck\Robo\Nvm\Task\WhichTask|\Robo\Collection\CollectionBuilder
      */
-    protected function taskNvmWhich(array $options = []): CollectionBuilder
-    {
+    protected function taskNvmWhich(
+        array $options = [],
+        ?NvmShFinderInterface $nvmShFinder = null
+    ): CollectionBuilder {
         /** @var \Sweetchuck\Robo\Nvm\Task\WhichTask|\Robo\Collection\CollectionBuilder $task */
-        $task = $this->task(Task\WhichTask::class);
+        $task = $this->task(Task\WhichTask::class, $nvmShFinder);
         if ($this instanceof ContainerAwareInterface) {
             $task->setContainer($this->getContainer());
         }

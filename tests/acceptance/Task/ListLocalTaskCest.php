@@ -3,25 +3,34 @@
 namespace Sweetchuck\Robo\Nvm\Tests\Acceptance\Task;
 
 use Robo\Collection\CollectionBuilder;
+use Sweetchuck\Robo\Nvm\NvmShFinderInterface;
+use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyNvmShFinder;
 
 class ListLocalTaskCest extends TaskCestBase
 {
+    /**
+     * @return \Sweetchuck\Robo\Nvm\Task\ListLocalTask|\Robo\Collection\CollectionBuilder
+     */
+    protected function getTask(array $options = [], array $constructorArgs = []): CollectionBuilder
+    {
+        return $this->taskBuilder->taskNvmListLocal($options, ...$constructorArgs);
+    }
 
     /**
      * {@inheritdoc}
      */
     protected function runSuccessCases(): array
     {
-        $userName = getenv('USER');
-
         $logHeader = [
             'notice',
             'runs "<info>{command}</info>"',
             [
-                'command' => ". '/home/$userName/.nvm/nvm.sh'; nvm ls --no-colors",
+                'command' => ". '/my/path/to/nvm.sh'; nvm ls --no-colors",
                 'name' => 'NVM - List local',
             ],
         ];
+
+        $nvmShFinderDummy = new DummyNvmShFinder('/my/path/to/nvm.sh');
 
         return [
             'empty' => [
@@ -41,6 +50,9 @@ class ListLocalTaskCest extends TaskCestBase
                     'exitCode' => 0,
                     'stdOutput' => '',
                     'stdError' => '',
+                ],
+                'constructorArgs' => [
+                    $nvmShFinderDummy,
                 ],
             ],
             'basic' => [
@@ -70,16 +82,10 @@ class ListLocalTaskCest extends TaskCestBase
                     ]),
                     'stdError' => '',
                 ],
+                'constructorArgs' => [
+                    $nvmShFinderDummy,
+                ],
             ],
         ];
-    }
-
-
-    /**
-     * @return \Sweetchuck\Robo\Nvm\Task\ListLocalTask|\Robo\Collection\CollectionBuilder
-     */
-    protected function getTask(): CollectionBuilder
-    {
-        return $this->taskBuilder->taskNvmListLocal();
     }
 }
