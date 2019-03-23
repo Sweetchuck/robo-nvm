@@ -37,7 +37,12 @@ class NvmShFinder implements NvmShFinderInterface
     {
         $candidates = [];
 
-        $dir = getenv('NVM_DIR') ?: getenv('NVM_HOME');
+        $dir = getenv('NVM_DIR');
+        if ($dir) {
+            $candidates[] = "$dir/nvm.sh";
+        }
+
+        $dir = getenv('NVM_HOME');
         if ($dir) {
             $candidates[] = "$dir/nvm.sh";
         }
