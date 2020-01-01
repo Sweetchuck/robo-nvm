@@ -15,7 +15,7 @@ use Sweetchuck\Robo\Nvm\Test\AcceptanceTester;
 use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyProcessHelper;
 use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder;
 use Symfony\Component\Console\Application as SymfonyApplication;
-use Symfony\Component\Debug\BufferingLogger;
+use Symfony\Component\ErrorHandler\BufferingLogger;
 
 abstract class TaskCestBase
 {
@@ -120,7 +120,7 @@ abstract class TaskCestBase
         }
 
         if (array_key_exists('logs', $example['expected'])) {
-            /** @var \Symfony\Component\Debug\BufferingLogger $logger */
+            /** @var \Symfony\Component\ErrorHandler\BufferingLogger $logger */
             $logger = $this->container->get('logger');
             $this->assertRoboTaskLogEntries($example['expected']['logs'], $logger->cleanLogs());
         }

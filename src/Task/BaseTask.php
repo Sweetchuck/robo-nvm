@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Nvm\Task;
 
+use Exception;
+use InvalidArgumentException;
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
 use Robo\Result;
@@ -73,6 +77,11 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
             ->expandOptions();
     }
 
+    public function __toString()
+    {
+        return $this->getTaskName();
+    }
+
     /**
      * @return $this
      */
@@ -112,12 +121,12 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
     {
         $matches = [];
         if (!preg_match('/^(?P<action>get|set)[A-Z]/u', $name, $matches)) {
-            throw new \InvalidArgumentException("@todo $name");
+            throw new InvalidArgumentException("@todo $name");
         }
 
         $method = $this->parseMethodName($name);
         if (!$method || !isset($this->options[$method['optionName']])) {
-            throw new \InvalidArgumentException("@todo $name");
+            throw new InvalidArgumentException("@todo $name");
         }
 
         $optionName = $method['optionName'];
@@ -127,7 +136,7 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
 
             case 'set':
                 if (count($arguments) !== 1) {
-                    throw new \InvalidArgumentException("The '$name' method has to be called with 1 argument.");
+                    throw new InvalidArgumentException("The '$name' method has to be called with 1 argument.");
                 }
 
                 $value = reset($arguments);
@@ -143,7 +152,7 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
                 return $this;
         }
 
-        throw new \Exception("Action not supported: $name");
+        throw new Exception("Action not supported: $name");
     }
 
     protected function parseMethodName(string $methodName): ?array

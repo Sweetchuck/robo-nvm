@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Nvm\Task;
 
 use Robo\Common\OutputAwareTrait;
@@ -7,7 +9,7 @@ use Robo\Contract\CommandInterface;
 use Robo\Contract\OutputAwareInterface;
 use Sweetchuck\Robo\Nvm\NvmShFinder;
 use Sweetchuck\Robo\Nvm\NvmShFinderInterface;
-use Sweetchuck\Robo\Nvm\Utils;
+use Sweetchuck\Utils\Filter\ArrayFilterEnabled;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
@@ -101,6 +103,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
+    //region getCommand
     /**
      * {@inheritdoc}
      */
@@ -150,6 +153,9 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function getCommandEnvironmentVariables()
     {
         return $this;
@@ -213,7 +219,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
                     break;
 
                 case 'option:value:list':
-                    $values = Utils::filterEnabled($option['value']);
+                    $values = array_keys($option['value'], true, true);
                     if ($values) {
                         $separator = $option['separator'] ?? ',';
                         $this->cmdPattern[] = "--$optionCliName=%s";
@@ -222,7 +228,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
                     break;
 
                 case 'option:value:multi':
-                    $values = Utils::filterEnabled($option['value']);
+                    $values = array_keys($option['value'], true, true);
                     if ($values) {
                         $this->cmdPattern[] = str_repeat("--$optionCliName=%s", count($values));
                         foreach ($values as $value) {
@@ -232,7 +238,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
                     break;
 
                 case 'argument:multi':
-                    foreach (Utils::filterEnabled($option['value']) as $value) {
+                    foreach (array_keys($option['value'], true, true) as $value) {
                         $this->cmdPattern[] = '%s';
                         $this->cmdArgs[] = escapeshellarg($value);
                     }
@@ -243,6 +249,9 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function getCommandNvmArguments()
     {
         return $this;
@@ -252,6 +261,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
     {
         return vsprintf(implode(' ', $this->cmdPattern), $this->cmdArgs);
     }
+    //endregion
 
     /**
      * {@inheritdoc}
