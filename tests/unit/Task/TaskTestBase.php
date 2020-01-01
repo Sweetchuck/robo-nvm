@@ -1,15 +1,22 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\Task;
 
 use Codeception\Test\Unit;
-use Robo\Application;
+use League\Container\Container as LeagueContainer;
+use Robo\Application as RoboApplication;
+use Robo\Collection\CollectionBuilder;
+use Robo\Config\Config;
 use Robo\Robo;
+use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
 use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyProcessHelper;
-use Symfony\Component\Console\Helper\HelperSet;
+use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder;
+use Symfony\Component\ErrorHandler\BufferingLogger;
 
-abstract class BaseCliTaskTestBase extends Unit
+abstract class TaskTestBase extends Unit
 {
     /**
      * @var \Sweetchuck\Robo\Nvm\Test\UnitTester
@@ -17,63 +24,57 @@ abstract class BaseCliTaskTestBase extends Unit
     protected $tester;
 
     /**
+     * @var \League\Container\ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * @var \Robo\Config\Config
+     */
+    protected $config;
+
+    /**
+     * @var \Robo\Collection\CollectionBuilder
+     */
+    protected $builder;
+
+    /**
+     * @var \Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder
+     */
+    protected $taskBuilder;
+
+    /**
      * @var \Sweetchuck\Robo\Nvm\Task\BaseCliTask
      */
     protected $task;
 
-    protected $originalContainer;
-
-    protected $container;
-
-    // @phpcs:disable PSR2.Methods.MethodDeclaration.Underscore
     public function _before()
     {
         parent::_before();
-        $this
-            ->backupContainer()
-            ->initContainer()
-            ->initTask();
-    }
-
-    protected function _after()
-    {
-        $this->restoreContainer();
-        parent::_after();
-    }
-    //phpcs:enable PSR2.Methods.MethodDeclaration.Underscore
-
-    protected function backupContainer()
-    {
-        $this->originalContainer = Robo::hasContainer() ? Robo::getContainer() : null;
-        if ($this->originalContainer) {
-            Robo::unsetContainer();
-        }
-
-        return $this;
-    }
-
-    protected function initContainer()
-    {
-        $this->container = Robo::createDefaultContainer();
-
-        $application = new Application('RoboNvmTest', '1.0.0');
-        $application->setHelperSet(new HelperSet(['process' => new DummyProcessHelper()]));
-        $this->container->add('application', $application);
-
-        return $this;
-    }
-
-    protected function restoreContainer()
-    {
-        if ($this->originalContainer) {
-            Robo::setContainer($this->originalContainer);
-
-            return $this;
-        }
 
         Robo::unsetContainer();
+        DummyProcess::reset();
 
-        return $this;
+        $this->container = new LeagueContainer();
+        $application = new RoboApplication('Sweetchuck - Robo PHPUnit', '1.0.0');
+        $application->getHelperSet()->set(new DummyProcessHelper(), 'process');
+        $this->config = new Config();
+        $input = null;
+        $output = new DummyOutput([
+            'verbosity' => DummyOutput::VERBOSITY_DEBUG,
+        ]);
+
+        $this->container->add('container', $this->container);
+
+        Robo::configureContainer($this->container, $application, $this->config, $input, $output);
+        $this->container->share('logger', BufferingLogger::class);
+
+        $this->builder = CollectionBuilder::create($this->container, null);
+        $this->taskBuilder = new DummyTaskBuilder();
+        $this->taskBuilder->setContainer($this->container);
+        $this->taskBuilder->setBuilder($this->builder);
+
+        $this->initTask();
     }
 
     /**
@@ -106,8 +107,8 @@ abstract class BaseCliTaskTestBase extends Unit
         $instanceIndex = count(DummyProcess::$instances);
         DummyProcess::$prophecy[$instanceIndex] = $processProphecy;
 
-        $this->task->setContainer($this->container);
-        $result = $this->task
+        $result = $this
+            ->task
             ->setOptions($options)
             ->run();
 

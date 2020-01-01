@@ -1,6 +1,22 @@
 {
+    "type": "robo-tasks",
     "name": "sweetchuck/robo-nvm",
     "description": "Robo task wrapper for NVM commands.",
+    "keywords": [
+        "robo-tasks",
+        "nvm"
+    ],
+    "authors": [
+        {
+            "name": "Dávid Andor",
+            "role": "Maintainer",
+            "homepage": "https://github.com/Sweetchuck"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/Sweetchuck/robo-nvm",
+        "issues": "https://github.com/Sweetchuck/robo-nvm/issues"
+    },
     "license": "GPL-3.0-or-later",
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -10,20 +26,21 @@
         "sort-packages": true
     },
     "require": {
-        "php": ">=7.1",
-        "consolidation/robo": "^1.0",
+        "php": ">=7.2",
+        "consolidation/robo": "^2.0",
         "danielstjules/stringy": "^3.1",
-        "sweetchuck/utils": "dev-master"
+        "sweetchuck/utils": "^0.1"
     },
     "require-dev": {
         "ext-json": "*",
-        "codeception/codeception": "^2.2",
-        "squizlabs/php_codesniffer": "^3.3",
-        "sweetchuck/codeception-module-robo-task-runner": "^0.4",
+        "codeception/codeception": "^4.0",
+        "codeception/module-asserts": "^1.1",
+        "squizlabs/php_codesniffer": "^3.5",
+        "sweetchuck/codeception-module-robo-task-runner": "^0.7",
         "sweetchuck/git-hooks": "^0.0",
-        "sweetchuck/robo-git": "^0.0",
-        "sweetchuck/robo-phpcs": "^0.0.20",
-        "symfony/debug": "^4.1",
+        "sweetchuck/robo-git": "^0.2",
+        "sweetchuck/robo-phpcs": "^0.1",
+        "symfony/error-handler": "^5.0",
         "symfony/finder": "^4.0",
         "webmozart/path-util": "^2.3"
     },

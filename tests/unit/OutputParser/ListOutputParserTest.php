@@ -4,12 +4,13 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\OutputParser;
 
+use Codeception\Test\Unit;
 use Sweetchuck\Robo\Nvm\OutputParser\ListOutputParser;
 
 /**
  * @covers \Sweetchuck\Robo\Nvm\OutputParser\ListOutputParser<extended>
  */
-class ListOutputParserTest extends \Codeception\Test\Unit
+class ListOutputParserTest extends Unit
 {
 
     public function casesParse(): array

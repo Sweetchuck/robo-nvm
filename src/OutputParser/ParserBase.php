@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Nvm\OutputParser;
 
 use Sweetchuck\Robo\Nvm\OutputParserInterface;

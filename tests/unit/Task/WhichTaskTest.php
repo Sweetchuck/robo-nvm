@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\Task;
 
-use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder;
-
-class WhichTaskTest extends BaseCliTaskTestBase
+class WhichTaskTest extends TaskTestBase
 {
 
     /**
@@ -12,10 +12,7 @@ class WhichTaskTest extends BaseCliTaskTestBase
      */
     protected function initTask()
     {
-        $taskBuilder = new DummyTaskBuilder();
-        $taskBuilder->setContainer($this->container);
-
-        $this->task = $taskBuilder->taskNvmWhich();
+        $this->task = $this->taskBuilder->taskNvmWhich();
 
         return $this;
     }
