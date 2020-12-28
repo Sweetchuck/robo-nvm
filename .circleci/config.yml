@@ -1,6 +1,9 @@
 
 version: 2.1
 
+.env_common: &env_common
+    SHELL: '/bin/bash'
+
 .env_xdebug: &env_xdebug
     XDEBUG_MODE: 'coverage'
 
@@ -15,6 +18,7 @@ orbs:
 executors:
     php704:
         environment:
+            <<: *env_common
             <<: *env_xdebug
             <<: *env_composer
 
@@ -24,6 +28,7 @@ executors:
 
     php703:
         environment:
+            <<: *env_common
             <<: *env_xdebug
             <<: *env_composer
 

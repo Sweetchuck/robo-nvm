@@ -12,7 +12,7 @@ use Robo\Config\Config;
 use Robo\Robo;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
-use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyProcessHelper;
+use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcessHelper;
 use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder;
 use Symfony\Component\ErrorHandler\BufferingLogger;
 

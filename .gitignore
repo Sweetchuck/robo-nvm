@@ -1,10 +1,13 @@
 
 /bin/
-/vendor/
 
 /tests/_output/
 /tests/_support/_generated/
+/tests/*.suite.yml
+
+/vendor/
 
 /.git-hooks.local
 /.nvmrc
-/RoboFileExample.php
+/codeception.yml
+/RoboFileLocal.php

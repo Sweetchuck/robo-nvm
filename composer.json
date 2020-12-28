@@ -8,7 +8,7 @@
     ],
     "authors": [
         {
-            "name": "Dávid Andor",
+            "name": "Andor",
             "role": "Maintainer",
             "homepage": "https://github.com/Sweetchuck"
         }
@@ -23,6 +23,9 @@
     "config": {
         "bin-dir": "bin",
         "optimize-autoloader": true,
+        "preferred-install": {
+            "*": "dist"
+        },
         "sort-packages": true
     },
     "require": {
@@ -36,12 +39,12 @@
         "codeception/codeception": "^4.0",
         "codeception/module-asserts": "^1.1",
         "squizlabs/php_codesniffer": "^3.5",
-        "sweetchuck/codeception-module-robo-task-runner": "^0.7",
-        "sweetchuck/git-hooks": "^0.0",
-        "sweetchuck/robo-git": "^0.2",
-        "sweetchuck/robo-phpcs": "^0.1",
+        "sweetchuck/codeception-module-robo-task-runner": "1.x-dev",
+        "sweetchuck/git-hooks": "2.x-dev",
+        "sweetchuck/robo-git": "1.x-dev",
+        "sweetchuck/robo-phpcs": "1.x-dev",
         "symfony/error-handler": "^5.0",
-        "symfony/finder": "^4.0",
+        "symfony/finder": "^4.0 || ^5.0",
         "webmozart/path-util": "^2.3"
     },
     "autoload": {
@@ -56,13 +59,6 @@
             "Sweetchuck\\Robo\\Nvm\\Tests\\Unit\\": "tests/unit/"
         }
     },
-    "scripts": {
-        "post-install-cmd": [
-            "@deploy-git-hooks"
-        ],
-        "post-update-cmd": [
-            "@deploy-git-hooks"
-        ],
-        "deploy-git-hooks": "\\Sweetchuck\\GitHooks\\Composer\\Scripts::deploy"
-    }
+    "scripts": {},
+    "scripts-descriptions": {}
 }
