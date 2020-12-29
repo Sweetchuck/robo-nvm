@@ -4,12 +4,11 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Nvm\Task;
 
+use Consolidation\AnnotatedCommand\Output\OutputAwareInterface;
 use Robo\Common\OutputAwareTrait;
 use Robo\Contract\CommandInterface;
-use Robo\Contract\OutputAwareInterface;
 use Sweetchuck\Robo\Nvm\NvmShFinder;
 use Sweetchuck\Robo\Nvm\NvmShFinderInterface;
-use Sweetchuck\Utils\Filter\ArrayFilterEnabled;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Symfony\Component\Process\Process;
 
@@ -24,6 +23,11 @@ use Symfony\Component\Process\Process;
 abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputAwareInterface
 {
     use OutputAwareTrait;
+
+    /**
+     * @var string
+     */
+    protected $shell = '/bin/bash';
 
     /**
      * @var array
@@ -299,7 +303,16 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
 
         $process = $this
             ->getProcessHelper()
-            ->run($this->output(), $this->command, null, $processRunCallbackWrapper);
+            ->run(
+                $this->output(),
+                [
+                    $this->shell,
+                    '-c',
+                    $this->command,
+                ],
+                null,
+                $processRunCallbackWrapper,
+            );
 
         $this->processExitCode = $process->getExitCode();
         $this->processStdOutput = $process->getOutput();
