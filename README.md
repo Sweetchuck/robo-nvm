@@ -1,7 +1,7 @@
 # Robo task to run NVM related tasks
 
-[![CircleCI](https://circleci.com/gh/Sweetchuck/robo-nvm.svg?style=svg)](https://circleci.com/gh/Sweetchuck/robo-nvm)
-[![codecov](https://codecov.io/gh/Sweetchuck/robo-nvm/branch/1.x/graph/badge.svg)](https://codecov.io/gh/Sweetchuck/robo-nvm)
+[![CircleCI](https://circleci.com/gh/Sweetchuck/robo-nvm/tree/1.x.svg?style=svg)](https://circleci.com/gh/Sweetchuck/robo-nvm/?branch=1.x)
+[![codecov](https://codecov.io/gh/Sweetchuck/robo-nvm/branch/1.x/graph/badge.svg?token=HSF16OGPyr)](https://app.codecov.io/gh/Sweetchuck/robo-nvm/branch/1.x)
 
 
 ## Install
