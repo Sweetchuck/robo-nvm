@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Sweetchuck\Robo\Nvm\Test;
+namespace Sweetchuck\Robo\Nvm\Tests;
 
 /**
  * Inherited Methods

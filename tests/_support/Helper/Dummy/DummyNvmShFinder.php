@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace Sweetchuck\Robo\Nvm\Test\Helper\Dummy;
+namespace Sweetchuck\Robo\Nvm\Tests\Helper\Dummy;
 
 use Sweetchuck\Robo\Nvm\NvmShFinderInterface;
 

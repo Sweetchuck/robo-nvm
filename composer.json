@@ -24,7 +24,6 @@
         "allow-plugins": {
             "sweetchuck/git-hooks": true
         },
-        "bin-dir": "bin",
         "optimize-autoloader": true,
         "preferred-install": {
             "*": "dist"
@@ -33,7 +32,7 @@
     },
     "require": {
         "php": ">=7.4",
-        "consolidation/robo": "^2.0",
+        "consolidation/robo": "^3.0",
         "danielstjules/stringy": "^3.1",
         "sweetchuck/utils": "1.x-dev"
     },
@@ -41,11 +40,14 @@
         "ext-json": "*",
         "codeception/codeception": "^4.1",
         "codeception/module-asserts": "^1.1",
+        "nuvoleweb/robo-config": "^2.0",
+        "phpmd/phpmd": "^2.11",
         "squizlabs/php_codesniffer": "^3.5",
-        "sweetchuck/codeception-module-robo-task-runner": "1.x-dev",
+        "sweetchuck/codeception-module-robo-task-runner": "2.x-dev",
         "sweetchuck/git-hooks": "2.x-dev",
-        "sweetchuck/robo-git": "1.x-dev",
-        "sweetchuck/robo-phpcs": "1.x-dev",
+        "sweetchuck/robo-git": "2.x-dev",
+        "sweetchuck/robo-phpcs": "2.x-dev",
+        "sweetchuck/robo-phpmd": "2.x-dev",
         "symfony/error-handler": "^5.0",
         "symfony/finder": "^4.0 || ^5.0",
         "webmozart/path-util": "^2.3"
@@ -57,9 +59,9 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Sweetchuck\\Robo\\Nvm\\Test\\Helper\\": "tests/_support/Helper/",
             "Sweetchuck\\Robo\\Nvm\\Tests\\Acceptance\\": "tests/acceptance/",
-            "Sweetchuck\\Robo\\Nvm\\Tests\\Unit\\": "tests/unit/"
+            "Sweetchuck\\Robo\\Nvm\\Tests\\Unit\\": "tests/unit/",
+            "Sweetchuck\\Robo\\Nvm\\Tests\\": "tests/_support/"
         }
     },
     "scripts": {},

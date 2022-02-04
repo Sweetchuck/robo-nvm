@@ -4,49 +4,32 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\Task;
 
+use Codeception\Util\Stub;
 use Codeception\Test\Unit;
 use League\Container\Container as LeagueContainer;
+use Psr\Container\ContainerInterface;
 use Robo\Application as RoboApplication;
 use Robo\Collection\CollectionBuilder;
-use Robo\Config\Config;
+use Robo\Config\Config as RoboConfig;
 use Robo\Robo;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyOutput;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcess;
 use Sweetchuck\Codeception\Module\RoboTaskRunner\DummyProcessHelper;
-use Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder;
-use Symfony\Component\ErrorHandler\BufferingLogger;
+use Sweetchuck\Robo\Nvm\Task\BaseCliTask;
+use Sweetchuck\Robo\Nvm\Tests\Helper\Dummy\DummyTaskBuilder;
+use Sweetchuck\Robo\Nvm\Tests\UnitTester;
 
 abstract class TaskTestBase extends Unit
 {
-    /**
-     * @var \Sweetchuck\Robo\Nvm\Test\UnitTester
-     */
-    protected $tester;
+    protected UnitTester $tester;
 
-    /**
-     * @var \League\Container\ContainerInterface
-     */
-    protected $container;
+    protected ContainerInterface $container;
 
-    /**
-     * @var \Robo\Config\Config
-     */
-    protected $config;
+    protected RoboConfig $config;
 
-    /**
-     * @var \Robo\Collection\CollectionBuilder
-     */
-    protected $builder;
+    protected CollectionBuilder $builder;
 
-    /**
-     * @var \Sweetchuck\Robo\Nvm\Test\Helper\Dummy\DummyTaskBuilder
-     */
-    protected $taskBuilder;
-
-    /**
-     * @var \Sweetchuck\Robo\Nvm\Task\BaseCliTask
-     */
-    protected $task;
+    protected DummyTaskBuilder $taskBuilder;
 
     public function _before()
     {
@@ -56,45 +39,72 @@ abstract class TaskTestBase extends Unit
         DummyProcess::reset();
 
         $this->container = new LeagueContainer();
-        $application = new RoboApplication('Sweetchuck - Robo PHPUnit', '1.0.0');
+        $application = new RoboApplication('Sweetchuck - Robo NVM', '2.0.0');
         $application->getHelperSet()->set(new DummyProcessHelper(), 'process');
-        $this->config = new Config();
+        $this->config = new RoboConfig();
         $input = null;
         $output = new DummyOutput([
             'verbosity' => DummyOutput::VERBOSITY_DEBUG,
         ]);
 
-        $this->container->add('container', $this->container);
-
         Robo::configureContainer($this->container, $application, $this->config, $input, $output);
-        $this->container->share('logger', BufferingLogger::class);
 
         $this->builder = CollectionBuilder::create($this->container, null);
         $this->taskBuilder = new DummyTaskBuilder();
         $this->taskBuilder->setContainer($this->container);
         $this->taskBuilder->setBuilder($this->builder);
-
-        $this->initTask();
+        $this->taskBuilder->setOutput($output);
+        $this->taskBuilder->setLogger($this->container->get('logger'));
     }
 
-    /**
-     * @return $this
-     */
-    abstract protected function initTask();
+    protected function createTask(array $properties = []): BaseCliTask
+    {
+        $cb = $this->createTaskInstance();
+        $task = $cb->getCollectionBuilderCurrentTask();
+
+        $output = $this->container->get('output');
+
+        $properties += [
+            'processClass' => DummyProcess::class,
+            'container' => $this->container,
+        ];
+
+        /** @var \Sweetchuck\Robo\Nvm\Task\BaseCliTask $task */
+        $task = Stub::copy($task, $properties);
+        $cb = Stub::copy(
+            $cb,
+            [
+                'currentTask' => $task,
+                'container' => $this->container,
+            ],
+        );
+
+        $cb->setOutput($output);
+        $cb->setContainer($this->container);
+        $task->setOutput($output);
+
+        return $task;
+    }
+
+    abstract protected function createTaskInstance(): CollectionBuilder;
 
     abstract public function casesGetCommand(): array;
 
     /**
      * @dataProvider casesGetCommand
      */
-    public function testGetCommand(string $expected, array $options)
-    {
+    public function testGetCommand(
+        string $expected,
+        array $options,
+        array $taskProperties = []
+    ): void {
         $options += [
             'nvmShFilePath' => '/home/me/.nvm/nvm.sh',
         ];
-        $this->task->setOptions($options);
+        $task = $this->createTask($taskProperties);
+        $task->setOptions($options);
 
-        $this->tester->assertEquals($expected, $this->task->getCommand());
+        $this->tester->assertEquals($expected, $task->getCommand());
     }
 
     abstract public function casesRunSuccess(): array;
@@ -102,13 +112,18 @@ abstract class TaskTestBase extends Unit
     /**
      * @dataProvider casesRunSuccess
      */
-    public function testRunSuccess(array  $expected, array $processProphecy, array $options = []): void
-    {
+    public function testRunSuccess(
+        array $expected,
+        array $processProphecy,
+        array $options = [],
+        array $taskProperties = []
+    ): void {
+        $task = $this->createTask($taskProperties);
+
         $instanceIndex = count(DummyProcess::$instances);
         DummyProcess::$prophecy[$instanceIndex] = $processProphecy;
 
-        $result = $this
-            ->task
+        $result = $task
             ->setOptions($options)
             ->run();
 
