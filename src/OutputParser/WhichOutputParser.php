@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Nvm\OutputParser;
 
-use Webmozart\PathUtil\Path;
+use Symfony\Component\Filesystem\Path;
 
 class WhichOutputParser extends ParserBase
 {
@@ -41,10 +41,10 @@ class WhichOutputParser extends ParserBase
         }
 
         $lines = explode(PHP_EOL, $stdOutput);
-        $nodeExecutable = end($lines);
+        $nodeExecutable = end($lines) ?: null;
 
         $return['assets'][$assetNameNodeExecutable] = $nodeExecutable;
-        $return['assets'][$assetNameBinDir] = Path::getDirectory($nodeExecutable);
+        $return['assets'][$assetNameBinDir] = $nodeExecutable ? Path::getDirectory($nodeExecutable) : null;
 
         return $return;
     }
