@@ -9,6 +9,8 @@
 /.git-hooks.local
 /.nvmrc
 
+/phpcs.xml
+
 /RoboFileLocal.php
 /RoboFileAcceptance.php
 /robo.yml
