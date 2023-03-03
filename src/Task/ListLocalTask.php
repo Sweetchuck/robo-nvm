@@ -8,28 +8,16 @@ use Sweetchuck\Robo\Nvm\OutputParser\ListOutputParser;
 
 class ListLocalTask extends BaseCliTask
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $taskName = 'NVM - List local';
+    protected string $taskName = 'NVM - List local';
 
-    /**
-     * {@inheritdoc}
-     */
-    protected $outputParserClass = ListOutputParser::class;
+    protected string $outputParserClass = ListOutputParser::class;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected $outputParserAssetNameMapping = [
+    protected array $outputParserAssetNameMapping = [
         'current' => 'nvm.listLocal.current',
         'versions' => 'nvm.listLocal.versions',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function initOptions()
+    protected function initOptions(): static
     {
         parent::initOptions();
         $this->options['command']['value'] = 'ls';
@@ -42,7 +30,7 @@ class ListLocalTask extends BaseCliTask
         return $this;
     }
 
-    protected function runInitAssets()
+    protected function runInitAssets(): static
     {
         parent::runInitAssets();
         $this->assets['nvm.listLocal.versions'] = null;

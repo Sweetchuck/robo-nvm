@@ -11,9 +11,9 @@ use League\Container\ContainerAwareTrait;
 use Robo\Result;
 use Robo\Task\BaseTask as RoboBaseTask;
 use Robo\TaskInfo;
-use Stringy\StaticStringy;
 use Sweetchuck\Robo\Nvm\OutputParserInterface;
 use Sweetchuck\Utils\Comparer\ArrayValueComparer;
+use Symfony\Component\String\UnicodeString;
 
 /**
  * @method string getAssetNamePrefix()
@@ -21,54 +21,27 @@ use Sweetchuck\Utils\Comparer\ArrayValueComparer;
  * @method string getWorkingDirectory()
  * @method $this  setWorkingDirectory(string $path)
  */
-abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
+abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface, \Stringable
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $taskName = 'NVM';
+    protected string $taskName = 'NVM';
 
-    /**
-     * @var array
-     */
-    protected $assets = [];
+    protected array $assets = [];
 
-    /**
-     * @var int
-     */
-    protected $processExitCode = 0;
+    protected int $processExitCode = 0;
 
-    /**
-     * @var string
-     */
-    protected $processStdOutput = '';
+    protected string $processStdOutput = '';
 
-    /**
-     * @var string
-     */
-    protected $processStdError = '';
+    protected string $processStdError = '';
 
-    /**
-     * @var \Sweetchuck\Robo\Nvm\OutputParserInterface
-     */
-    protected $outputParser;
+    protected ?OutputParserInterface $outputParser = null;
 
-    /**
-     * @var string
-     */
-    protected $outputParserClass = '';
+    protected string $outputParserClass = '';
 
-    /**
-     * @var array
-     */
-    protected $options = [];
+    protected array $options = [];
 
-    /**
-     * @var array
-     */
-    protected $outputParserAssetNameMapping = [];
+    protected array $outputParserAssetNameMapping = [];
 
     public function __construct()
     {
@@ -77,15 +50,12 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
             ->expandOptions();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getTaskName();
     }
 
-    /**
-     * @return $this
-     */
-    protected function initOptions()
+    protected function initOptions(): static
     {
         $this->options += [
             'workingDirectory' => [
@@ -101,12 +71,14 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
         return $this;
     }
 
-    protected function expandOptions()
+    protected function expandOptions(): static
     {
         foreach (array_keys($this->options) as $optionName) {
             $this->options[$optionName]['name'] = $optionName;
             if (!array_key_exists('cliName', $this->options[$optionName])) {
-                $this->options[$optionName]['cliName'] = StaticStringy::dasherize($optionName);
+                $this->options[$optionName]['cliName'] = (new UnicodeString($optionName))
+                    ->snake($optionName)
+                    ->replace('_', '-');
             }
         }
         uasort($this->options, new ArrayValueComparer([
@@ -188,10 +160,7 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
         return $this->outputParser;
     }
 
-    /**
-     * @return $this
-     */
-    public function setOptions(array $options)
+    public function setOptions(array $options): static
     {
         foreach ($options as $optionName => $value) {
             if (!isset($this->options[$optionName])) {
@@ -228,49 +197,31 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface
             ->runReturn();
     }
 
-    /**
-     * @return $this
-     */
-    protected function runInit()
+    protected function runInit(): static
     {
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function runValidate()
+    protected function runValidate(): static
     {
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function runHeader()
+    protected function runHeader(): static
     {
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    abstract protected function runDoIt();
+    abstract protected function runDoIt(): static;
 
-    /**
-     * @return $this
-     */
-    protected function runInitAssets()
+    protected function runInitAssets(): static
     {
         $this->assets = [];
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function runProcessOutputs()
+    protected function runProcessOutputs(): static
     {
         $outputParser = $this->getOutputParser();
         if ($outputParser) {

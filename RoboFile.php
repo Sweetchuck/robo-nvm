@@ -68,6 +68,17 @@ class RoboFile extends Tasks implements LoggerAwareInterface, ConfigAwareInterfa
     }
 
     /**
+     * @command deleteme:include
+     */
+    public function cmdDeletemeIncludeExecute(
+        array $options = []
+    ) {
+        \Codeception\Lib\Notification::warning('my', 'here');
+        $messages = \Codeception\Lib\Notification::all();
+        var_dump($messages);
+    }
+
+    /**
      * @hook pre-command @initLintReporters
      */
     public function initLintReporters()
@@ -158,20 +169,14 @@ class RoboFile extends Tasks implements LoggerAwareInterface, ConfigAwareInterfa
         return ($output instanceof ConsoleOutputInterface) ? $output->getErrorOutput() : $output;
     }
 
-    /**
-     * @return $this
-     */
-    protected function initEnvVarNamePrefix()
+    protected function initEnvVarNamePrefix(): static
     {
         $this->envVarNamePrefix = strtoupper(str_replace('-', '_', $this->packageName));
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function initEnvironmentTypeAndName()
+    protected function initEnvironmentTypeAndName(): static
     {
         $this->environmentType = (string) getenv($this->getEnvVarName('environment_type'));
         $this->environmentName = (string) getenv($this->getEnvVarName('environment_name'));
@@ -214,10 +219,7 @@ class RoboFile extends Tasks implements LoggerAwareInterface, ConfigAwareInterfa
         return "{$this->envVarNamePrefix}_" . strtoupper($name);
     }
 
-    /**
-     * @return $this
-     */
-    protected function initComposerInfo()
+    protected function initComposerInfo(): static
     {
         if ($this->composerInfo) {
             return $this;
@@ -239,10 +241,7 @@ class RoboFile extends Tasks implements LoggerAwareInterface, ConfigAwareInterfa
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function initCodeceptionInfo()
+    protected function initCodeceptionInfo(): static
     {
         if ($this->codeceptionInfo) {
             return $this;
@@ -529,21 +528,5 @@ class RoboFile extends Tasks implements LoggerAwareInterface, ConfigAwareInterfa
                 1
             );
         }
-    }
-
-    protected function getPhpExecutableWithCoverage(): array
-    {
-        $default = [
-            'available' => true,
-            'envVar' => [],
-            'command' => 'php',
-        ];
-        foreach ($this->config('php.executable') as $php) {
-            if (!empty($php['available'])) {
-                return $php + $default;
-            }
-        }
-
-        return $default;
     }
 }

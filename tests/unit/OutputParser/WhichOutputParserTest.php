@@ -8,7 +8,8 @@ use Codeception\Test\Unit;
 use Sweetchuck\Robo\Nvm\OutputParser\WhichOutputParser;
 
 /**
- * @covers \Sweetchuck\Robo\Nvm\OutputParser\WhichOutputParser<extended>
+ * @covers \Sweetchuck\Robo\Nvm\OutputParser\WhichOutputParser
+ * @covers \Sweetchuck\Robo\Nvm\OutputParser\ParserBase
  */
 class WhichOutputParserTest extends Unit
 {

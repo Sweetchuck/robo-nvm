@@ -9,12 +9,9 @@ use Symfony\Component\Filesystem\Filesystem;
 class NvmShFinder implements NvmShFinderInterface
 {
 
-    /**
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    protected $fs;
+    protected \Symfony\Component\Filesystem\Filesystem $fs;
 
-    public function __construct(? Filesystem $fs = null)
+    public function __construct(?Filesystem $fs = null)
     {
         $this->fs = $fs ?: new Filesystem();
     }

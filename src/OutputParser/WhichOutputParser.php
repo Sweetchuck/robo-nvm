@@ -8,17 +8,11 @@ use Symfony\Component\Filesystem\Path;
 
 class WhichOutputParser extends ParserBase
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $assetNameMapping = [
+    protected array $assetNameMapping = [
         'nodeExecutable' => 'nvm.which.nodeExecutable',
         'binDir' => 'nvm.which.binDir',
     ];
 
-    /**
-     * {@inheritdoc}
-     */
     public function parse(int $exitCode, string $stdOutput, string $stdError): array
     {
         if ($exitCode !== 0) {

@@ -10,20 +10,14 @@ abstract class ParserBase implements OutputParserInterface
 {
 
     // region assetNameMapping
-    /**
-     * @var array
-     */
-    protected $assetNameMapping = [];
+    protected array $assetNameMapping = [];
 
     public function getAssetNameMapping(): array
     {
         return $this->assetNameMapping;
     }
 
-    /**
-     * @return $this
-     */
-    public function setAssetNameMapping(array $value)
+    public function setAssetNameMapping(array $value): static
     {
         $this->assetNameMapping = $value;
 
@@ -36,8 +30,5 @@ abstract class ParserBase implements OutputParserInterface
         return $this->assetNameMapping[$internalAssetName];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     abstract public function parse(int $exitCode, string $stdOutput, string $stdError): array;
 }

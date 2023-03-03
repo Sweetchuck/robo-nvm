@@ -8,20 +8,11 @@ use Sweetchuck\Robo\Nvm\OutputParser\WhichOutputParser;
 
 class WhichTask extends BaseCliTask
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected $taskName = 'NVM - Which';
+    protected string $taskName = 'NVM - Which';
 
-    /**
-     * {@inheritdoc}
-     */
-    protected $outputParserClass = WhichOutputParser::class;
+    protected string $outputParserClass = WhichOutputParser::class;
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function initOptions()
+    protected function initOptions(): static
     {
         parent::initOptions();
         $this->options['command']['value'] = 'which';
@@ -29,7 +20,7 @@ class WhichTask extends BaseCliTask
         return $this;
     }
 
-    protected function runInitAssets()
+    protected function runInitAssets(): static
     {
         parent::runInitAssets();
         $this->assets['nvm.which.nodeExecutable'] = null;

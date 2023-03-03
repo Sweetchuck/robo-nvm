@@ -8,7 +8,8 @@ use Codeception\Test\Unit;
 use Sweetchuck\Robo\Nvm\OutputParser\ListOutputParser;
 
 /**
- * @covers \Sweetchuck\Robo\Nvm\OutputParser\ListOutputParser<extended>
+ * @covers \Sweetchuck\Robo\Nvm\OutputParser\ListOutputParser
+ * @covers \Sweetchuck\Robo\Nvm\OutputParser\ParserBase
  */
 class ListOutputParserTest extends Unit
 {

@@ -9,19 +9,13 @@ use Sweetchuck\Robo\Nvm\NvmShFinderInterface;
 class DummyNvmShFinder implements NvmShFinderInterface
 {
 
-    /**
-     * @var string
-     */
-    protected $nvmSh = '';
+    protected string $nvmSh = '';
 
     public function __construct(string $nvmSh)
     {
         $this->nvmSh = $nvmSh;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find(): string
     {
         return $this->nvmSh;

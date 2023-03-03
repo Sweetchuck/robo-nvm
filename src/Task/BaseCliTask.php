@@ -24,48 +24,27 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
 {
     use OutputAwareTrait;
 
-    /**
-     * @var string
-     */
-    protected $shell = '/bin/bash';
+    protected string $shell = '/bin/bash';
 
-    /**
-     * @var array
-     */
-    protected $cmdPattern = [];
+    protected array $cmdPattern = [];
 
-    /**
-     * @var array
-     */
-    protected $cmdArgs = [];
+    protected array $cmdArgs = [];
 
-    /**
-     * @var string
-     */
-    protected $command = '';
+    protected string $command = '';
 
-    /**
-     * @var array
-     */
-    protected $optionGroupWeights = [
+    protected array $optionGroupWeights = [
         'other' => 100,
     ];
 
-    /**
-     * @var \Sweetchuck\Robo\Nvm\NvmShFinderInterface
-     */
-    protected $nvmShFinder;
+    protected NvmShFinderInterface $nvmShFinder;
 
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(?NvmShFinderInterface $nvmShFinder = null)
     {
         $this->nvmShFinder = $nvmShFinder ?: new NvmShFinder();
         parent::__construct();
     }
 
-    protected function initOptions()
+    protected function initOptions(): static
     {
         parent::initOptions();
         $this->options += [
@@ -87,20 +66,14 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function addArgument(string $argument)
+    public function addArgument(string $argument): static
     {
         $this->options['arguments']['value'][$argument] = true;
 
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function removeArgument(string $argument)
+    public function removeArgument(string $argument): static
     {
         unset($this->options['arguments']['value'][$argument]);
 
@@ -125,10 +98,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
             ->getCommandBuild();
     }
 
-    /**
-     * @return $this
-     */
-    protected function getCommandInit()
+    protected function getCommandInit(): static
     {
         $this->cmdPattern = [];
         $this->cmdArgs = [];
@@ -136,10 +106,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function getCommandChangeDirectory()
+    protected function getCommandChangeDirectory(): static
     {
         if ($this->options['workingDirectory']['value']) {
             $this->cmdPattern[] = 'cd %s &&';
@@ -149,26 +116,17 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function getCommandPrefix()
+    protected function getCommandPrefix(): static
     {
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function getCommandEnvironmentVariables()
+    protected function getCommandEnvironmentVariables(): static
     {
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function getCommandNvmExecutable()
+    protected function getCommandNvmExecutable(): static
     {
         $nvmShFilePath = $this->options['nvmShFilePath']['value'] ?: $this->nvmShFinder->find();
         if ($nvmShFilePath) {
@@ -181,10 +139,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function getCommandNvmCommand()
+    protected function getCommandNvmCommand(): static
     {
         if ($this->options['command']['value']) {
             $this->cmdPattern[] = '%s';
@@ -194,10 +149,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function getCommandNvmOptions()
+    protected function getCommandNvmOptions(): static
     {
         foreach ($this->options as $optionName => $option) {
             $optionCliName = $option['cliName'];
@@ -253,10 +205,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function getCommandNvmArguments()
+    protected function getCommandNvmArguments(): static
     {
         return $this;
     }
@@ -267,20 +216,14 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
     }
     //endregion
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function runInit()
+    protected function runInit(): static
     {
         $this->command = $this->getCommand();
 
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function runHeader()
+    protected function runHeader(): static
     {
         $this->printTaskInfo(
             'runs "<info>{command}</info>"',
@@ -292,10 +235,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
         return $this;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function runDoIt()
+    protected function runDoIt(): static
     {
         $processRunCallbackWrapper = function (string $type, string $data): void {
             $this->processRunCallback($type, $data);
