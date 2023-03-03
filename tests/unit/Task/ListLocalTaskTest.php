@@ -4,14 +4,14 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\Task;
 
-use Robo\Collection\CollectionBuilder;
+use Sweetchuck\Robo\Nvm\Task\BaseTask;
+use Sweetchuck\Robo\Nvm\Task\ListLocalTask;
 
 class ListLocalTaskTest extends TaskTestBase
 {
-
-    protected function createTaskInstance(): CollectionBuilder
+    protected function createTaskInstance(): BaseTask
     {
-        return $this->taskBuilder->taskNvmListLocal();
+        return new ListLocalTask();
     }
 
     public function casesGetCommand(): array

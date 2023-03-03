@@ -4,14 +4,15 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\Task;
 
-use Robo\Collection\CollectionBuilder;
+use Sweetchuck\Robo\Nvm\Task\BaseTask;
+use Sweetchuck\Robo\Nvm\Task\WhichTask;
 
 class WhichTaskTest extends TaskTestBase
 {
 
-    protected function createTaskInstance(): CollectionBuilder
+    protected function createTaskInstance(): BaseTask
     {
-        return $this->taskBuilder->taskNvmWhich();
+        return new WhichTask();
     }
 
     public function casesGetCommand(): array
