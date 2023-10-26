@@ -77,14 +77,18 @@ abstract class BaseTask extends RoboBaseTask implements ContainerAwareInterface,
             $this->options[$optionName]['name'] = $optionName;
             if (!array_key_exists('cliName', $this->options[$optionName])) {
                 $this->options[$optionName]['cliName'] = (new UnicodeString($optionName))
-                    ->snake($optionName)
+                    ->snake()
                     ->replace('_', '-');
             }
         }
-        uasort($this->options, new ArrayValueComparer([
-            'weight' => 500,
-            'name' => '',
-        ]));
+        $comparer = new ArrayValueComparer();
+        $comparer->setOptions([
+            'keys' => [
+                'weight' => 500,
+                'name' => '',
+            ],
+        ]);
+        uasort($this->options, $comparer);
 
         return $this;
     }
