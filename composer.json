@@ -33,7 +33,7 @@
     "require": {
         "php": ">=8.1",
         "consolidation/robo": "^4.0",
-        "sweetchuck/utils": "1.x-dev",
+        "sweetchuck/utils": "2.x-dev",
         "symfony/string": "^5.0 || ^6.2"
     },
     "require-dev": {
