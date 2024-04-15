@@ -170,7 +170,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
                     // @todo Handle empty strings or "0".
                     if ($option['value']) {
                         $this->cmdPattern[] = "--$optionCliName=%s";
-                        $this->cmdArgs[] = escapeshellarg($option['value']);
+                        $this->cmdArgs[] = escapeshellarg((string) $option['value']);
                     }
                     break;
 
@@ -188,7 +188,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
                     if ($values) {
                         $this->cmdPattern[] = str_repeat("--$optionCliName=%s", count($values));
                         foreach ($values as $value) {
-                            $this->cmdArgs[] = escapeshellarg($value);
+                            $this->cmdArgs[] = escapeshellarg((string) $value);
                         }
                     }
                     break;
@@ -196,7 +196,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
                 case 'argument:multi':
                     foreach (array_keys($option['value'], true, true) as $value) {
                         $this->cmdPattern[] = '%s';
-                        $this->cmdArgs[] = escapeshellarg($value);
+                        $this->cmdArgs[] = escapeshellarg((string) $value);
                     }
                     break;
             }

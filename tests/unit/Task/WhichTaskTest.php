@@ -31,6 +31,12 @@ class WhichTaskTest extends TaskTestBase
                     'arguments' => ['8.9'],
                 ],
             ],
+            'non-string argument:multi' => [
+                ". '/home/me/.nvm/nvm.sh'; nvm which '42'",
+                [
+                    'arguments' => [42],
+                ],
+            ],
 
         ];
     }
