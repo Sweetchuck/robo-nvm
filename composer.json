@@ -30,27 +30,33 @@
         },
         "sort-packages": true
     },
+    "repositories": {
+        "nuvoleweb/robo-config": {
+            "type": "github",
+            "url": "https://github.com/Sweetchuck/robo-config.git"
+        }
+    },
     "require": {
-        "php": ">=8.2",
-        "consolidation/robo": "^4.0",
+        "php": ">=8.3",
+        "consolidation/robo": "^5.0",
         "sweetchuck/utils": "2.x-dev",
-        "symfony/string": "^5.0 || ^6.2"
+        "symfony/string": "^6.2 || ^7.0"
     },
     "require-dev": {
         "ext-json": "*",
         "codeception/codeception": "^5.0",
         "codeception/module-asserts": "^3.0",
-        "nuvoleweb/robo-config": "^3.0",
+        "nuvoleweb/robo-config": "4.x-dev",
         "phpmd/phpmd": "^2.11",
         "squizlabs/php_codesniffer": "^3.5",
-        "sweetchuck/codeception-module-robo-task-runner": "3.x-dev",
+        "sweetchuck/codeception-module-robo-task-runner": "4.x-dev",
         "sweetchuck/git-hooks": "2.x-dev",
-        "sweetchuck/robo-git": "3.x-dev",
-        "sweetchuck/robo-phpcs": "3.x-dev",
-        "sweetchuck/robo-phpmd": "3.x-dev",
-        "symfony/error-handler": "^5.0 || ^6.0",
-        "symfony/filesystem": "^5.0 || ^6.0",
-        "symfony/finder": "^5.0 || ^6.0"
+        "sweetchuck/robo-git": "4.x-dev",
+        "sweetchuck/robo-phpcs": "4.x-dev",
+        "sweetchuck/robo-phpmd": "4.x-dev",
+        "symfony/error-handler": "^6.0 || ^7.0",
+        "symfony/filesystem": "^6.0 || ^7.0",
+        "symfony/finder": "^6.0 || ^7.0"
     },
     "autoload": {
         "psr-4": {
@@ -63,7 +69,5 @@
             "Sweetchuck\\Robo\\Nvm\\Tests\\Unit\\": "tests/unit/",
             "Sweetchuck\\Robo\\Nvm\\Tests\\": "tests/_support/"
         }
-    },
-    "scripts": {},
-    "scripts-descriptions": {}
+    }
 }

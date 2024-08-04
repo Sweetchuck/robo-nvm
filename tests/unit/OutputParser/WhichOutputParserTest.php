@@ -4,17 +4,18 @@ declare(strict_types = 1);
 
 namespace Sweetchuck\Robo\Nvm\Tests\Unit\OutputParser;
 
+use Codeception\Attribute\DataProvider;
 use Codeception\Test\Unit;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Sweetchuck\Robo\Nvm\OutputParser\ParserBase;
 use Sweetchuck\Robo\Nvm\OutputParser\WhichOutputParser;
 
-/**
- * @covers \Sweetchuck\Robo\Nvm\OutputParser\WhichOutputParser
- * @covers \Sweetchuck\Robo\Nvm\OutputParser\ParserBase
- */
+#[CoversClass(WhichOutputParser::class)]
+#[CoversClass(ParserBase::class)]
 class WhichOutputParserTest extends Unit
 {
 
-    public function casesParse(): array
+    public static function casesParse(): array
     {
         return [
             'exitCode 1' => [[], 1],
@@ -55,14 +56,12 @@ class WhichOutputParserTest extends Unit
         ];
     }
 
-    /**
-     * @dataProvider casesParse
-     */
+    #[DataProvider('casesParse')]
     public function testParse(
         array $expected,
         int $exitCode,
         string $stdOutput = '',
-        string $stdError = ''
+        string $stdError = '',
     ): void {
         $parser = new WhichOutputParser();
         static::assertSame($expected, $parser->parse($exitCode, $stdOutput, $stdError));

@@ -151,7 +151,7 @@ abstract class BaseCliTask extends BaseTask implements CommandInterface, OutputA
 
     protected function getCommandNvmOptions(): static
     {
-        foreach ($this->options as $optionName => $option) {
+        foreach ($this->options as $option) {
             $optionCliName = $option['cliName'];
             switch ($option['type']) {
                 case 'option:flag':
