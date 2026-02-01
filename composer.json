@@ -24,7 +24,6 @@
         "allow-plugins": {
             "sweetchuck/git-hooks": true
         },
-        "bin-dir": "bin",
         "optimize-autoloader": true,
         "preferred-install": {
             "*": "dist"
@@ -61,7 +60,5 @@
             "Sweetchuck\\Robo\\Nvm\\Tests\\Acceptance\\": "tests/acceptance/",
             "Sweetchuck\\Robo\\Nvm\\Tests\\Unit\\": "tests/unit/"
         }
-    },
-    "scripts": {},
-    "scripts-descriptions": {}
+    }
 }
